@@ -39,11 +39,18 @@ public class MainController {
             for (WebElement vacancy: vacancyTable) {
                 String idVacancy = vacancy.getAttribute("id");
                 try {
+                    //Finding a clickable button to go to the vacancy page
                     WebElement clickable = vacancy.findElement(By.xpath("//*[@id=" + idVacancy + "]/td/article/div[1]/div[1]/h3/a"));
-                    System.out.println(clickable.getAttribute("title"));
+
+                    //Opening it in new tab
                     String selectLinkOpeninNewTab = Keys.chord(Keys.CONTROL,Keys.RETURN);
                     clickable.sendKeys(selectLinkOpeninNewTab);
+
+                    //Switching to the newly opened tab
                     ArrayList<String> tabs2 = new ArrayList<>(driver.getWindowHandles());
+
+
+                    //Closing the new tab and switching to the main one
                     driver.switchTo().window(tabs2.get(1));
                     driver.close();
                     driver.switchTo().window(tabs2.get(0));
