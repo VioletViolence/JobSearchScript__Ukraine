@@ -1,3 +1,5 @@
+package specificSiteControllers;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.Keys;
@@ -32,14 +34,14 @@ public class RabotaUA_Controller {
         //Getting usable englishValue from raw value
         String usableEnglishValue;
         switch (englishLevelRawValue){
-            case "0" : usableEnglishValue = "1";      //не владею
-            case "A1" : usableEnglishValue = "2";     //базовый
-            case "A2" : usableEnglishValue = "3";     //ниже среднего
-            case "B1" : usableEnglishValue = "4";     //средний
-            case "B2" : usableEnglishValue = "5";     //выше среднего
-            case "C1" : usableEnglishValue = "6";     //продвинутый
-            case "C2" : usableEnglishValue = "7";     //свободно
-            case "Native" : usableEnglishValue = "8"; //родной
+            case "0" : usableEnglishValue = "1";break;      //не владею
+            case "A1" : usableEnglishValue = "2";break;     //базовый
+            case "A2" : usableEnglishValue = "3";break;     //ниже среднего
+            case "B1" : usableEnglishValue = "4";break;     //средний
+            case "B2" : usableEnglishValue = "5";break;     //выше среднего
+            case "C1" : usableEnglishValue = "6";break;     //продвинутый
+            case "C2" : usableEnglishValue = "7";break;     //свободно
+            case "Native" : usableEnglishValue = "8";break; //родной
             default: usableEnglishValue = "0";
         }
 
@@ -78,6 +80,7 @@ public class RabotaUA_Controller {
                             statsNeededList.add(stat.getText());
                             String statText = stat.getText();
                             System.out.println(statText);
+                            //Analyzing a match
                             switch (stat.getText()) {
                                 case "Java": hiringGoodnessIndeex += 15; break;
                                 case "Spring": hiringGoodnessIndeex += 10; break;
