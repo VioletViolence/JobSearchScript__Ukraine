@@ -28,7 +28,7 @@ public class MainController {
 
             List<WebElement> vacancyTable = driver.findElements(By.className("f-vacancylist-vacancyblock"));
             for (WebElement vacancy: vacancyTable) {
-                WebElement clickable = vacancy.findElement(By.className("f-visited-enable ga_listing");
+                WebElement clickable = vacancy.findElement(By.className("f-visited-enable ga_listing"));
                 System.out.println(clickable.getAttribute("title"));
             }
             System.out.println(vacancyTable.size());
