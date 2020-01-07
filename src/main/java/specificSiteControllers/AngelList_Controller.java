@@ -4,6 +4,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 public class AngelList_Controller {
     public static void searchOnAngelList(String emailValue,String passwordValue) {
         //Setting things up and getting a window open
@@ -22,8 +27,19 @@ public class AngelList_Controller {
         loginButton.click();
 
         //TODO: Setting up the job parameters
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
-        //Getting all of the startups
 
+//        //Getting all of the startups
+//        WebElement startupHolder = driver.findElement(By.xpath("//*[@id=\"startups_content\"]/div[1]/div[5]"));
+//        String startupIDs = startupHolder.getAttribute("data-startup_ids");
+//        startupIDs =  startupIDs.substring(1, startupIDs.length()-2);
+//        String[] idList = startupIDs.trim().split(",");
+//        System.out.println(Arrays.toString(idList));
+        List<WebElement> startupList = driver.findElements(By.xpath("/html/body/div[1]/div[4]/div[2]/div[1]/div[2]/div/div/div[1]/div[5]/div[1]/div/div"));
+        System.out.println(startupList.size());
+        for (WebElement startup : startupList) {
+            startup.click();
+        }
     }
 }
