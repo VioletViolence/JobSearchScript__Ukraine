@@ -8,10 +8,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.io.*;
 import java.util.*;
 
 public class RabotaUA_Controller {
-    public static void searchOnRabota(String emailValue,String firstNameValue, String surnameValue, String englishLevelRawValue) throws InterruptedException {
+    public static void searchOnRabota(String keyword, String emailValue,String firstNameValue, String surnameValue, String englishLevelRawValue) throws InterruptedException {
         //Setting things up and getting a window open
         System.setProperty("webdriver.chrome.driver", "C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/chromedriver.exe");
         ChromeDriver driver = new ChromeDriver();
@@ -20,7 +21,7 @@ public class RabotaUA_Controller {
 
         //Entering the search words and going to the page
         WebElement input = driver.findElement(By.xpath("//input[@placeholder='Введите ключевые слова']"));
-        input.sendKeys("Junior Java Engineer");
+        input.sendKeys(keyword);
 
         Actions builder = new Actions(driver);
         builder.sendKeys(Keys.ENTER).build().perform();
@@ -89,6 +90,7 @@ public class RabotaUA_Controller {
                                 case "Middle/Специалист":
                                     hiringGoodnessIndeex -= 3;
                                     break;
+                                case "Senior/Старший специалист": hiringGoodnessIndeex -= 20;
                                 case "Android":
                                     hiringGoodnessIndeex -= 5;
                                     break;
@@ -141,15 +143,27 @@ public class RabotaUA_Controller {
                 }
                 try {
                     List<WebElement> nextPage = driver.findElements(By.xpath("/html/body/form/div[4]/div/section/div[2]/table/tbody/tr[21]/td/dl/dd[9]/a"));
+                    File file = new File("C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/resumeSent.txt");
                     if (nextPage.size() >= 1) {
                         nextPage.get(0).click();
                     } else {
                         done = true;
 
+                        if (file.createNewFile()){
+                            System.out.println("File is created!");
+                        } else {
+                            System.out.println("File already exists.");
+                        }
+
                         Iterator it = goodJobList.entrySet().iterator();
                         while (it.hasNext()) {
                             Map.Entry pair = (Map.Entry) it.next();
                             System.out.println(pair.getKey() + " = " + pair.getValue());
+                            FileOutputStream fos = new FileOutputStream(file);
+                            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+                            bw.write(pair.getKey() + " = " + pair.getValue() + "_______Resume sent");
+                            bw.newLine();
+                            bw.close();
                             it.remove(); // avoids a ConcurrentModificationException
                         }
                         System.out.println(goodJobCount);
