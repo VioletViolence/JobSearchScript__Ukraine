@@ -54,7 +54,9 @@ public class RabotaUA_Controller {
             WebElement foundDriver = driver.findElement(By.className("fd-fat-merchant"));
 
             //Finding all vacancy elements on the page and iterating over them
-            if (Integer.parseInt(foundDriver.getText().trim()) >= 1) {
+            String foundVacanciesCount = foundDriver.getText().trim();
+            foundVacanciesCount = foundVacanciesCount.replaceAll("\\s+","");
+            if (Integer.parseInt(foundVacanciesCount) >= 1) {
                 System.out.println("Ama big boi and I do automatization");
 
                 List<WebElement> vacancyTable = driver.findElements(By.xpath("/html/body/form/div[4]/div/section/div[2]/table/tbody/tr"));
@@ -77,6 +79,7 @@ public class RabotaUA_Controller {
                         //Extract stats
                         List<WebElement> statsNeeded = driver.findElements(By.xpath("//*[@id='ctl00_content_vcVwPopup_VacancyViewInner1_Clusters_ClustersContainer']/div/div/div/ul/li"));
                         ArrayList<String> statsNeededList = new ArrayList<>();
+                        System.out.println(statsNeeded.size());
                         for (WebElement stat : statsNeeded) {
                             statsNeededList.add(stat.getText());
                             String statText = stat.getText();
@@ -84,11 +87,15 @@ public class RabotaUA_Controller {
                             //Analyzing a match
                             switch (stat.getText()) {
                                 case "Java": hiringGoodnessIndeex += 15; break;
+                                case "Remote": hiringGoodnessIndeex +=20; break;
+                                case "Selenium": hiringGoodnessIndeex += 4; break;
+                                case "JavaScript":
+                                case "Scala":
                                 case "Spring": hiringGoodnessIndeex += 10; break;
                                 case "Junior/Младший специалист": hiringGoodnessIndeex += 7; break;
                                 case "Работа для студента": hiringGoodnessIndeex += 5; break;
                                 case "Middle/Специалист":
-                                    hiringGoodnessIndeex -= 3;
+                                    hiringGoodnessIndeex -= 7;
                                     break;
                                 case "Senior/Старший специалист": hiringGoodnessIndeex -= 20;
                                 case "Android":
@@ -103,7 +110,7 @@ public class RabotaUA_Controller {
                         System.out.println(driver.getTitle());
                         System.out.println(hiringGoodnessIndeex);
 
-                        if (hiringGoodnessIndeex >= 15) {
+                        if (hiringGoodnessIndeex >= 7) {
                             goodJobList.put(driver.getTitle(), statsNeededList);
                             goodJobCount++;
                             WebElement apply = driver.findElement(By.id("ctl00_content_vcVwPopup_linkApply"));
@@ -114,17 +121,23 @@ public class RabotaUA_Controller {
                             WebElement email = driver.findElement(By.name("ctl00$content$vcVwPopup$vacancyApplyForm$txFromEMail"));
                             WebElement surname = driver.findElement(By.name("ctl00$content$vcVwPopup$vacancyApplyForm$txtSurName"));
                             WebElement firstName = driver.findElement(By.name("ctl00$content$vcVwPopup$vacancyApplyForm$txtName"));
-                            WebElement englishLevel = driver.findElement(By.name("ctl00$content$vcVwPopup$vacancyApplyForm$applyControlQuestion$rptLanguages$ctl00$ddlSkills"));
                             WebElement emailListCheckbox = driver.findElement(By.xpath("/html/body/form/div[4]/div[2]/div[1]/div[1]/div/div/div/div[3]/div[1]/div[3]/div[1]/div/div[2]/div[3]/div/div[1]"));
                             WebElement confirmButton = driver.findElement(By.id("ctl00_content_vcVwPopup_vacancyApplyForm_hpLnkSendResumeToEmployer"));
-                            Select selectEnglishLevel = new Select(englishLevel);
+
 
                             //Sending the values and confirming
-                            email.sendKeys(emailValue);
-                            surname.sendKeys(firstNameValue);
-                            firstName.sendKeys(surnameValue);
-                            selectEnglishLevel.selectByValue(usableEnglishValue);
-                            emailListCheckbox.click();
+                            try {
+                                WebElement englishLevel = driver.findElement(By.name("ctl00$content$vcVwPopup$vacancyApplyForm$applyControlQuestion$rptLanguages$ctl00$ddlSkills"));
+                                Select selectEnglishLevel = new Select(englishLevel);
+                                selectEnglishLevel.selectByValue(usableEnglishValue);
+                                email.sendKeys(emailValue);
+                                surname.sendKeys(firstNameValue);
+                                firstName.sendKeys(surnameValue);
+                                emailListCheckbox.click();
+                            }catch (Exception e){
+                                System.out.println(e);
+                            }
+
                             if(statsNeededList.contains("Java")){
                                 file.sendKeys("C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/Bogdan_Rosinskiy_resume(JD).pdf");
                             }else{
@@ -142,28 +155,16 @@ public class RabotaUA_Controller {
                     }
                 }
                 try {
-                    List<WebElement> nextPage = driver.findElements(By.xpath("/html/body/form/div[4]/div/section/div[2]/table/tbody/tr[21]/td/dl/dd[9]/a"));
-                    File file = new File("C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/resumeSent.txt");
+                    List<WebElement> nextPage = driver.findElements(By.id("ctl00_content_vacancyList_gridList_ctl23_linkNext"));
                     if (nextPage.size() >= 1) {
                         nextPage.get(0).click();
                     } else {
                         done = true;
 
-                        if (file.createNewFile()){
-                            System.out.println("File is created!");
-                        } else {
-                            System.out.println("File already exists.");
-                        }
-
                         Iterator it = goodJobList.entrySet().iterator();
                         while (it.hasNext()) {
                             Map.Entry pair = (Map.Entry) it.next();
                             System.out.println(pair.getKey() + " = " + pair.getValue());
-                            FileOutputStream fos = new FileOutputStream(file);
-                            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-                            bw.write(pair.getKey() + " = " + pair.getValue() + "_______Resume sent");
-                            bw.newLine();
-                            bw.close();
                             it.remove(); // avoids a ConcurrentModificationException
                         }
                         System.out.println(goodJobCount);
