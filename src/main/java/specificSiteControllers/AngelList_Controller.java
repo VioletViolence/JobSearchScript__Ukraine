@@ -1,6 +1,7 @@
 package specificSiteControllers;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -36,10 +37,13 @@ public class AngelList_Controller {
 //        startupIDs =  startupIDs.substring(1, startupIDs.length()-2);
 //        String[] idList = startupIDs.trim().split(",");
 //        System.out.println(Arrays.toString(idList));
-        List<WebElement> startupList = driver.findElements(By.xpath("/html/body/div[1]/div[4]/div[2]/div[1]/div[2]/div/div/div[1]/div[5]/div[1]/div/div"));
-        System.out.println(startupList.size());
+        List<WebElement> startupList = driver.findElements(By.xpath("/html/body/div[1]/div[4]/div[2]/div[1]/div[2]/div/div/div[1]/div[5]/div[1]/div/div[2]/div[1]/div[6]/div/div/div[3]/div[2]/div/div[1]/div[1]/a  "));
+        startupList.remove(0);
         for (WebElement startup : startupList) {
-            startup.click();
+            String selectLinkOpeninNewTab = Keys.chord(Keys.CONTROL, Keys.RETURN);
+            startup.sendKeys(selectLinkOpeninNewTab);
+            String url = startup.getAttribute("data-click-promotion-event-url");
+
         }
     }
 }
