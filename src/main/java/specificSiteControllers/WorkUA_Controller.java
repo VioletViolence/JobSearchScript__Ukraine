@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +47,33 @@ public class WorkUA_Controller {
             for (String keyword : keywords) {
                 if(html.contains(keyword)) relevancyCounter++;
             }
-            if(relevancyCounter >= keywords.length/2){
+            if(relevancyCounter >= keywords.length - (keywords.length/3) && html.contains("Java")){
                 WebElement applyButton = driver.findElement(By.xpath("//*[@id=\"fix-block\"]/div/div/div/div/div/ul/li[2]/a"));
                 applyButton.click();
 
                 System.out.println("Apply button clicked");
+
+                WebDriverWait wait = new WebDriverWait(driver,30);
+                wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"setupload\"]/span[1]")));
+
+                WebElement applyWithResumeOption = driver.findElement(By.xpath("//*[@id=\"setupload\"]/span[1]"));
+                applyWithResumeOption.click();
+
+
+                WebElement fullNameInput = driver.findElement(By.xpath("//*[@id=\"personal\"]/div[1]/input"));
+                WebElement emailInput = driver.findElement(By.xpath("//*[@id=\"email\"]"));
+                WebElement mobilePhone = driver.findElement(By.xpath("//*[@id=\"user_phone\"]"));
+                WebElement fileInput = driver.findElement(By.xpath("//*[@id=\"resume_file\"]"));
+
+                fullNameInput.sendKeys("Bogdan Rosinskiy");
+                emailInput.sendKeys("brosinskiy@gmail.com");
+                mobilePhone.sendKeys("0955243788");
+                fileInput.sendKeys("C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/Bogdan_Rosinskiy_resume(SD).pdf");
+
+                wait.until(ExpectedConditions.urlToBe("www.lol.com"));
+
+                WebElement sendButton = driver.findElement(By.xpath("//*[@id=\"submitbtn\"]"));
+                sendButton.click();
             }
 
             driver.close();
