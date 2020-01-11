@@ -93,13 +93,12 @@ public class RabotaUA_Controller {
                                 case "Scala":
                                 case "Spring": hiringGoodnessIndeex += 10; break;
                                 case "Junior/Младший специалист": hiringGoodnessIndeex += 7; break;
-                                case "Работа для студента": hiringGoodnessIndeex += 5; break;
                                 case "Middle/Специалист":
                                     hiringGoodnessIndeex -= 7;
                                     break;
                                 case "Senior/Старший специалист": hiringGoodnessIndeex -= 20;
                                 case "Android":
-                                    hiringGoodnessIndeex -= 5;
+                                    hiringGoodnessIndeex -= 10;
                                     break;
                                 case "Web development":
                                     hiringGoodnessIndeex -= 10;
@@ -110,7 +109,7 @@ public class RabotaUA_Controller {
                         System.out.println(driver.getTitle());
                         System.out.println(hiringGoodnessIndeex);
 
-                        if (hiringGoodnessIndeex >= 7) {
+                        if (hiringGoodnessIndeex >= 15) {
                             goodJobList.put(driver.getTitle(), statsNeededList);
                             goodJobCount++;
                             WebElement apply = driver.findElement(By.id("ctl00_content_vcVwPopup_linkApply"));
@@ -143,6 +142,7 @@ public class RabotaUA_Controller {
                             }else{
                                 file.sendKeys("C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/Bogdan_Rosinskiy_resume(SD).pdf");
                             }
+
                             confirmButton.click();
                             System.out.println("File sent");
                         }

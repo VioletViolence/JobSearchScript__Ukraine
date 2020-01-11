@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class WorkUA_Controller {
-    public static void main(String[] args) {
+    public static void searchOnWork(String searchKeyword, String emailValue,String nameValue) {
         System.setProperty("webdriver.chrome.driver", "C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/chromedriver.exe");
         ChromeDriver driver = new ChromeDriver();
         String[] keywords = {"Java", "Junior", "Developer", "Повна зайнятість"};
@@ -28,7 +28,7 @@ public class WorkUA_Controller {
         cityChanger.sendKeys("Київ");
         //cityChanger.sendKeys(Keys.ENTER);
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        searchInput.sendKeys("Junior Java");
+        searchInput.sendKeys(searchKeyword);
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         searchButton.click();
 
@@ -65,11 +65,12 @@ public class WorkUA_Controller {
                 WebElement mobilePhone = driver.findElement(By.xpath("//*[@id=\"user_phone\"]"));
                 WebElement fileInput = driver.findElement(By.xpath("//*[@id=\"resume_file\"]"));
 
-                fullNameInput.sendKeys("Bogdan Rosinskiy");
-                emailInput.sendKeys("brosinskiy@gmail.com");
+                fullNameInput.sendKeys(nameValue);
+                emailInput.sendKeys(emailValue);
                 mobilePhone.sendKeys("0955243788");
                 fileInput.sendKeys("C:/Users/brosi/IdeaProjects/JobSearchScript(Maven)/src/main/java/Bogdan_Rosinskiy_resume(SD).pdf");
 
+                //Stopper. To be commented out
                 wait.until(ExpectedConditions.urlToBe("www.lol.com"));
 
                 WebElement sendButton = driver.findElement(By.xpath("//*[@id=\"submitbtn\"]"));
