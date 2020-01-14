@@ -5,6 +5,9 @@ public class MainController {
     public static void main(String[] args) throws InterruptedException {
         RabotaUA_Controller.searchOnRabota("Developer","brosinskiy@gmail.com","Bogdan","Rosinskiy","C1");
         WorkUA_Controller.searchOnWork("Developer","brosinskiy@gmail.com","Bogdan Rosinskiy");
+
+        //TODO: Full parametrisation
+        //TODO: GUI
     }
 }
 
